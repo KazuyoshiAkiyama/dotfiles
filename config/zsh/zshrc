@@ -14,7 +14,14 @@ compinit
 eval "$(devbox global shellenv --init-hook)"
 
 # use sheldon as a plugin manager
-eval "$(sheldon source)"
+SHELDON_CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/sheldon.zsh"
+SHELDON_TOML="${XDG_CONFIG_HOME:-$HOME/.config}/sheldon/plugins.toml"
+if [[ ! -r "${SHELDON_CACHE}" || "${SHELDON_TOML}" -nt "${SHELDON_CACHE}" ]]; then
+  mkdir -p ${XDG_CACHE_HOME:-$HOME/.cache}
+  sheldon source > ${SHELDON_CACHE}
+fi
+source "${SHELDON_CACHE}"
+unset SHELDON_CACHE SHELDON_TOML
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
