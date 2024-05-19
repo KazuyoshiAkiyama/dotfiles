@@ -41,6 +41,8 @@ setopt pushd_to_home
 # Ensure path arrays do not contain duplicates.
 typeset -gU cdpath fpath mailpath path
 
+fpath=(~/.local/share/sheldon/repos/github.com/zsh-users/zsh-completions/src $fpath)
+
 # Set the list of directories that Zsh searches for programs
 path=(
   /usr/local/{bin,sbin}
