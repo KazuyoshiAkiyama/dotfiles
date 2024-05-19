@@ -1,0 +1,53 @@
+# `sheldon` configuration file
+# ----------------------------
+#
+# You can modify this file directly or you can use one of the following
+# `sheldon` commands which are provided to assist in editing the config file:
+#
+# - `sheldon add` to add a new plugin to the config file
+# - `sheldon edit` to open up the config file in the default editor
+# - `sheldon remove` to remove a plugin from the config file
+#
+# See the documentation for more https://github.com/rossmacarthur/sheldon#readme
+
+shell = "zsh"
+
+[plugins.powerlevel10k]
+github = 'romkatv/powerlevel10k'
+
+[plugins.local]
+local = "~/.config/zsh"
+use = ["{!override,*}.zsh"]
+
+[plugins]
+[plugins.base16]
+github = 'chriskempson/base16-shell'
+
+[plugins.zsh-syntax-highlighting]
+github = "zsh-users/zsh-syntax-highlighting"
+[plugins.zsh-syntax-highlighting.hooks]
+post = """
+bindkey '^F' fast-complete
+"""
+
+[plugins.zsh-autosuggestions]
+github = "zsh-users/zsh-autosuggestions"
+use = ["{{ name }}.zsh"]
+
+[plugins.autojump]
+github = "wting/autojump"
+dir = "bin"
+apply = ["PATH", "source"]
+
+[plugins."z.lua"]
+github = "skywind3000/z.lua"
+
+[plugins.enhancd]
+github = "b4b4r07/enhancd"
+[plugins.enhancd.hooks]
+post = """
+export ENHANCD_FILTER=fzy:fzf:peco
+export ENHANCD_DOT_ARG="^"
+export ENHANCD_HOME_ARG=""
+export ENHANCD_DISABLE_HOME=1
+"""

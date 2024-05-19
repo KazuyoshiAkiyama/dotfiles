@@ -1,0 +1,340 @@
+# Required:
+[[plugins]]
+repo = 'Shougo/dein.vim'
+
+# Basic Utility
+[[plugins]]
+repo = 'mattn/vim-sonictemplate'
+# :Template
+
+# Git
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+
+# Color/Theme
+# See dein.windows.toml and dein.linux.toml
+
+# Ranger
+# blose.vim is the dependency of ranger.vim
+[[plugins]]
+repo = 'rbgrouleff/bclose.vim'
+# See dein.linux.toml
+
+# fzf
+[[plugins]]
+repo = 'junegunn/fzf'
+hook_post_update = './install --all'
+merged = 0
+
+[[plugins]]
+repo = 'junegunn/fzf.vim'
+depends = 'fzf'
+hook_add = '''
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+
+nnoremap rg :Rg<Space><CR>
+nnoremap <silent><Leader>g :GFiles<CR>
+nnoremap <silent><Leader>h :History<CR>
+nnoremap <silent><Leader>b :Buffers<CR>
+nnoremap <silent><Leader>l :Lines<CR>
+'''
+
+[[plugins]]
+repo = 'voldikss/vim-floaterm'
+hook_add = '''
+" install neovim-remote: pip3 install neovim-remote
+let g:floaterm_height = 1.0
+let g:floaterm_width = 0.8
+let g:floaterm_keymap_toggle = '<Leader>t'
+let g:floaterm_gitcommit = 'split'
+'''
+
+# Ctags
+[[plugins]]
+repo = 'soramugi/auto-ctags.vim'
+hook_done_update = '''
+:! type ctags || sudo apt install exuberant-ctags
+'''
+hook_add = '''
+let g:auto_ctags = 1
+let g:auto_ctags_directory_list = ['.git', '.svc', '~/.cache/ctags']
+let g:auto_ctags_search_recursively = 1
+let g:auto_ctags_tags_args = ['--tag-relative=yes', '--recurse=yes', '--sort=yes',
+  \ '--langmap=C:+.h.S']
+let g:auto_ctags_filetype_mode = 1
+let g:auto_ctags_set_tags_option = 1
+let g:auto_ctags_warn_once = 1
+let g:rooter_manual_only = 0
+'''
+
+[[plugins]]
+repo = 'airblade/vim-rooter'
+hook_add = '''
+let g:rooter_patterns = ['.git', '.svn',
+  \ 'LISENCE*', 'MAINTAINERS*', 'README*',
+  \ 'build/', 'CMakeLists.txt', 'Makefile']
+'''
+
+# Auto format
+[[plugins]]
+repo = 'ntpeters/vim-better-whitespace'
+hook_add = '''
+let g:better_whitespace_enabled = 1
+let g:strip_whitespace_on_save = 1
+let g:strip_only_modified_lines = 1
+let g:strip_whitelines_at_eof = 1
+let g:show_spaces_that_precede_tabs = 1
+let g:better_whitespace_skip_empty_lines = 1
+" usage:
+"   :EnableWhitespace  --- enable whitespace highlighting
+"   :DisableWhitespace --- disable whitespace highlighting
+"   :ToggleWhitespace  --- toggle whitespace highlighting
+"   :StripWhitespacce  --- clean extra whitespace
+"   :EnableStripWhitespaceOnSave  --- enable strip whitespace on save
+"   :DisableStripWhitespaceOnSave --- disable strip whitespace on save
+"   :ToggleStripWhitespaceOnSave  --- toggle strip whitespace on save
+'''
+
+[[plugins]]
+repo = 'kergoth/vim-bitbake'
+
+# Language Server
+[[plugins]]
+repo = 'neoclide/coc.nvim'
+rev = 'release'
+merged = 0
+hook_add = '''
+set hidden
+set nobackup
+set nowritebackup
+
+set cmdheight=2
+set updatetime=300
+set shortmess+=c
+set signcolumn=yes
+
+set pumblend=10
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+if has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1] =~# '\s'
+endfunction
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+nnoremap <silent> <space>d :CocDiagnostics<CR>
+
+" GoTo code navigation.
+nmap <silent> <space>df  <Plug>(coc-definition)
+nmap <silent> <fpace>im  <Plug>(coc-implementation)
+nmap <silent> <space>rn  <Plug>(coc-rename)
+nmap <silent> <space>fmt <Plug>(coc-format)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+" Formatting selected code.
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Applying codeAction to the selected region.
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap keys for applying codeAction to the current buffer.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Map function and class text objects
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
+
+" Remap <C-f> and <C-b> for scroll float windows/popups.
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+endif
+
+" Use CTRL-S for selections ranges.
+" Requires 'textDocument/selectionRange' support of language server.
+nmap <silent> <C-S> <Plug>(coc-range-select)
+xmap <silent> <C-S> <Plug>(coc-range-select)
+
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
+
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+" Add (Neo)Vim's native statusline support.
+" NOTE: Please see `:h coc-status` for integrations with external plugins that
+" provide custom statusline: lightline.vim, vim-airline.
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" Mappings for CoCList
+" Show commands.
+nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document.
+nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols.
+nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+" Open coc list.
+nnoremap <silent><nowait> <space><space>  :<C-u>CocList<CR>
+
+" coc-action: Remap for do codeAction of selected region
+function! s:cocActionsOpenFromSelected(type) abort
+  execute 'CocCommand actions.open ' . a:type
+endfunction
+xnoremap <silent><nowait> <space>a :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
+nnoremap <silent><nowait> <space>a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<CR>g@
+
+" coc-yank
+nnoremap <silent> <space>y :<C-u>CocList -A --normal yank<CR>
+
+" coc-explorer: https://www.npmjs.com/package/coc-explorer
+nmap <silent> <space>e :CocCommand explorer<CR>
+
+" coc-fzf-preview: https://www.npmjs.com/package/coc-fzf-preview
+" Show all diagnostics.
+nnoremap <silent><nowait> <space>w  :<C-u>CocCommand fzf-preview.CocCurrentDiagnostics<CR>
+nnoremap <silent><nowait> <space>W  :<C-u>CocCommand fzf-preview.CocDiagnostics<CR>
+" Show reference
+nnoremap <silent><nowait> <space>rf  :<C-u>CocCommand fzf-preview.CocReferences<CR>
+nnoremap <silent><nowait> <space>ty  :<C-u>CocCommand fzf-preview.CocTypeDefinitions<CR>
+
+if has('win32') || has('win64')
+
+" Intead of ranger.vim
+
+:function OpenExplorerOnPWD()
+:  let g:pwd = expand('%:p:h')
+:  execute 'CocCommand explorer ' . g:pwd
+:endfunction
+
+:function OpenExplorerOnPWDOnTabNew()
+:  let g:pwd = expand('%:p:h')
+:  tabnew
+:  execute 'CocCommand explorer ' . g:pwd
+:endfunction
+
+nnoremap <silent><Leader>c :call OpenExplorerOnPWD()<CR>
+nnoremap <silent><Leader>r :call OpenExplorerOnPWDOnTabNew()<CR>
+
+endif
+'''
+
+hook_post_update = '''
+:CocInstall coc-sh
+:CocInstall coc-cmake
+:CocInstall coc-flutter
+:CocInstall coc-toml
+:CocInstall coc-json
+:CocInstall coc-lists
+:CocInstall coc-python
+:CocInstall coc-lua
+:CocInstall coc-go
+:CocInstall coc-rls
+:CocInstall coc-stylelint
+:CocInstall coc-spell-checker
+:CocInstall coc-html
+:CocInstall coc-css
+:CocInstall coc-prettier
+:CocInstall coc-yank
+:CocInstall coc-snippets
+" coc-fzf-previewめっちゃ難しそう(https://www.npmjs.com/package/coc-fzf-preview)
+:CocInstall coc-fzf-preview
+:CocInstall coc-highlight
+:CocInstall coc-xml
+:CocInstall coc-actions
+:CocInstall coc-explorer
+:CocInstall coc-yaml
+:CocInstall coc-tag
+:CocInstall coc-esbonio
+'''

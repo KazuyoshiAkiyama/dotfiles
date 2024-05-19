@@ -1,0 +1,17 @@
+# Plugins loaded after vim is launced
+[[plugins]]
+repo = 'thinca/vim-quickrun'
+# exec command. howto: :QuickRun
+hook_add = '''
+" QuickRun
+nnoremap <C-r> :QuickRun<CR>
+'''
+
+[[plugins]]
+repo = 'goldie-lin/vim-dts'
+
+[[plugins]]
+repo = 'simeji/winresizer'
+hook_add = '''
+nnoremap <C-e> :WinResizerStartResize<CR>
+'''
