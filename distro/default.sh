@@ -95,6 +95,7 @@ run_target_config() {
   printf "zsh configuration..."
   mkdir ${XDG_CONFIG_HOME}/zsh -p
   cp ${CONFIG_DIR}/zsh/* ${XDG_CONFIG_HOME}/zsh
+  ln -sft ${XDG_CONFIG_HOME}/zsh/zshrc ${HOME}/.zshrc
   mkdir ${XDG_CONFIG_HOME}/sheldon -p
   cp ${CONFIG_DIR}/sheldon/* ${XDG_CONFIG_HOME}/sheldon
   echo "done."
