@@ -18,10 +18,12 @@ run_target_apt() {
     openssh-server
     python3-pip
     python-is-python3
+    zsh
   )
   for i in "${install[@]}"; do
     sudo apt install ${i} -y
   done
+  sudo chsh ${USER} zsh
 }
 
 # run_target_nvm() {
