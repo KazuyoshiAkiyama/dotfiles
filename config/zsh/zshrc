@@ -1,14 +1,141 @@
+# shell options
+# ------------------------------
+# History
+# ------------------------------
+# historyを置き換えるのではなく追加する
+setopt APPEND_HISTORY
+# 同時に起動しているzshの間でhistoryを共有する
+setopt SHARE_HISTORY
+# historyをインクリメンタルに保存(share_historyとは排他なので無効化)
+unsetopt INC_APPEND_HISTORY
+# セッション間でヒストリーを即時共有するためにコマンド実行後すぐにhistoryに保存
+# (share_historyとは排他なので無効化)
+unsetopt INC_APPEND_HISTORY_TIME
+# historyに保存するときに余分なスペースを削除する
+setopt HIST_REDUCE_BLANKS
+# history整理時に重複イベントを先に排除
+setopt HIST_EXPIRE_DUPS_FIRST
+# historyの重複を記録しない
+setopt HIST_IGNORE_DUPS
+# 同じコマンドをhistoryに残さない
+setopt HIST_IGNORE_ALL_DUPS
+# historyを編集可能
+setopt HIST_VERIFY
+# 補完時にhistoryを自動的に展開
+setopt HIST_EXPAND
+# history上で> を |>に書き換える
+setopt HIST_ALLOW_CLOBBER
+# history検索時に重複を無視
+setopt HIST_FIND_NO_DUPS
+# history系コマンドを保存しない
+setopt HIST_NO_STORE
+# 性能向上？
+setopt HIST_FCNTL_LOCK
+# ヒストリファイルエントリの形式を拡張
+setopt EXTENDED_HISTORY
+# !を使ったhistory展開を有効化
+setopt BANG_HIST
+
+export HISTFILE="${ZDOTDIR:-$HOME}/.zsh_history"
+export HISTSIZE=20000
+export SAVEHIST=20000
+
+# ------------------------------
+# cd
+# ------------------------------
+# cd無しでもディレクトリ移動
+setopt AUTO_CD
+# cd時に自動でpush
+setopt AUTOPUSHD
+# pushd, popdの出力を無効化
+setopt PUSHD_SILENT
+# 引数なしのpushdをpushd $HOMEとして扱う
+setopt PUSHD_TO_HOME
+# 同じディレクトリをpushしない
+setopt PUSHD_IGNORE_DUPS
+
+# ------------------------------
+# completions
+# ------------------------------
+# コマンドのスペルミスを指摘
+setopt CORRECT
+# カッコの対応などを自動で保管
+setopt AUTO_PARAM_KEYS
+# ディレクトリ名補完で末尾の/を自動的に補完して次の補完に備える
+setopt AUTO_PARAM_SLASH
+# 単語の両端から補完
+setopt COMPLETE_IN_WORD
+# 補完時に単語の終わりにカーソルを移動
+setopt ALWAYS_TO_END
+# スラッシュを含むコマンド名でもパス検索を行う
+setopt PATH_DIRS
+# タブ連打で補完候補を表示
+setopt AUTO_MENU
+# 曖昧な補完時に自動的にリスト表示
+setopt AUTO_LIST
+# 高機能なワイルドカード展開を使用する
+setopt EXTENDED_GLOB
+# foo=var のときにfoo=$varと補完
+setopt GLOB_ASSIGN
+
+# ------------------------------
+# utility
+# ------------------------------
+# ビープ音無効
+setopt NOBEEP
+# TABで保管候補切り替え
+setopt AUTO_MENU
+# --prefix=/usr などの=以降も補完
+setopt MAGIC_EQUAL_SUBST
+# 自動エスケープ
+setopt RC_QUOTES
+# 新プロセス起動前に既存のジョブの再開を試みる
+setopt AUTO_RESUME
+# バックグラウンドジョブの状態を即時通知
+setopt NOTIFY
+
+# completions enable
+autoload -U compinit
+autoload -U bashcompinit
+compinit
+bashcompinit
+
+#==============================================================================
+
+# powerlevel10k theme conficts with zsh-defer
+# so, only this plugin is installed manually
+[ -d ${XDG_CACHE_HOME:-$HOME/.cache}/powerlevel10k ] || {
+    mkdir -p ${XDG_CACHE_HOME:-$HOME/.cache}
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${XDG_CACHE_HOME:-$HOME/.cache}/powerlevel10k
+}
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+source ${XDG_CACHE_HOME:-$HOME/.cache}/powerlevel10k/powerlevel10k.zsh-theme
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 [ -f ${HOME}/.nvm/nvm.sh ] && source ${HOME}/.nvm/nvm.sh
 
-autoload -U compinit
-compinit
+# source command override technique
+function source {
+  ensure_zcompiled $1
+  builtin source $1
+}
+function ensure_zcompiled {
+  local compiled="$1.zwc"
+  if [[ ! -r "$compiled" || "$1" -nt "$compiled" ]]; then
+    echo "\033[1;36mCompiling\033[m $1"
+    zcompile $1
+  fi
+}
+ensure_zcompiled ~/.zshrc
+ensure_zcompiled ~/.zcompdump
 
 # use devbox global as a package manager
 eval "$(devbox global shellenv --init-hook)"
@@ -23,5 +150,5 @@ fi
 source "${SHELDON_CACHE}"
 unset SHELDON_CACHE SHELDON_TOML
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# restore builtin source
+zsh-defer unfunction source

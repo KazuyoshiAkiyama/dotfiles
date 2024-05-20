@@ -338,3 +338,6 @@ hook_post_update = '''
 :CocInstall coc-tag
 :CocInstall coc-esbonio
 '''
+
+[[plugins]]
+repo = 'github/copilot.vim'

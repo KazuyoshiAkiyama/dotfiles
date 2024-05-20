@@ -11,9 +11,14 @@
 # See the documentation for more https://github.com/rossmacarthur/sheldon#readme
 
 shell = "zsh"
+apply = ["defer"]
 
-[plugins.powerlevel10k]
-github = 'romkatv/powerlevel10k'
+[templates]
+defer = "{{ hooks | get: \"pre\" | nl }}{% for file in files %}zsh-defer source \"{{ file }}\"\n{% endfor %}{{ hooks | get: \"post\" | nl }}"
+
+[plugins.zsh-defer]
+github = "romkatv/zsh-defer"
+apply = ["source"]
 
 [plugins.local]
 local = "~/.config/zsh"
@@ -22,28 +27,43 @@ use = ["{!override,*}.zsh"]
 [plugins]
 [plugins.base16]
 github = 'chriskempson/base16-shell'
+apply = ["defer"]
+hooks.post = 'source ~/.base16_theme'
 
 [plugins.zsh-syntax-highlighting]
 github = "zsh-users/zsh-syntax-highlighting"
-[plugins.zsh-syntax-highlighting.hooks]
-post = """
-bindkey '^F' fast-complete
-"""
+apply = ["defer"]
 
 [plugins.zsh-autosuggestions]
 github = "zsh-users/zsh-autosuggestions"
 use = ["{{ name }}.zsh"]
+apply = ["defer"]
+
+[plugins.zsh-history-substring-search]
+github = "zsh-users/zsh-history-substring-search"
+hooks.post = """
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+HISTORY_SUBSTRING_SEARCH_FUZZY=1
+HISTORY_SUBSTRING_SEARCH_PREFIXED=1
+"""
+
+[plugins.zsh-completions]
+github = "zsh-users/zsh-completions"
+apply = ["defer"]
 
 [plugins.autojump]
 github = "wting/autojump"
 dir = "bin"
-apply = ["PATH", "source"]
+apply = ["PATH", "source", "defer"]
 
 [plugins."z.lua"]
 github = "skywind3000/z.lua"
+apply = ["defer"]
 
 [plugins.enhancd]
 github = "b4b4r07/enhancd"
+apply = ["defer"]
 [plugins.enhancd.hooks]
 post = """
 export ENHANCD_FILTER=fzy:fzf:peco

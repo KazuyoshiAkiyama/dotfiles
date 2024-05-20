@@ -2,7 +2,7 @@
 
 run_target_devbox() {
   curl -fsSL https://get.jetify.com/devbox | bash
-  devbox global pull git@github.com:KZYSAKYM/devbox-global-config.git
+  devbox global pull https://github.com/KZYSAKYM/devbox-global-config.git
   devbox global install
 
   # Post Funcs
@@ -16,7 +16,7 @@ run_target_cargo() {
     rust-analysis
     rust-src
   )
-  for i in "${install[@]}"; do
+  for i in "${installs[@]}"; do
     rustup component add ${i}
   done
 }
@@ -27,7 +27,9 @@ run_target_apt() {
 }
 
 run_target_nvm() {
-  git clone https://github.com/creationix/nvm.git $HOME/.nvm
+  [ -d ${HOME}/.nvm ] || {
+    git clone https://github.com/creationix/nvm.git $HOME/.nvm
+  }
   . $HOME/.nvm/nvm.sh
   nvm install --lts --no-progress
   source ${HOME}/.nvm/nvm.sh
@@ -49,6 +51,11 @@ run_target_config() {
   mkdir ${XDG_CONFIG_HOME}/tmux -p
   cp ${CONFIG_DIR}/tmux/* ${XDG_CONFIG_HOME}/tmux
   ln -fsr ${XDG_CONFIG_HOME}/tmux/tmux.conf ${HOME}/.tmux.conf
+  mkdir -p ${XDG_CONFIG_HOME}/tmux/plugins
+  [ -d ${XDG_CONFIG_HOME}/tmux/plugins/tpm ] || {
+    git clone https://github.com/tmux-plugins/tpm ${XDG_CONFIG_HOME}/tmux/plugins/tpm
+    ${XDG_CONFIG_HOME}/tmux/plugins/tpm/scripts/install_plugins.sh
+  }
   echo "done."
   echo "please see ${XDG_CONFIG_HOME}/tmux"
   echo ""
@@ -63,7 +70,9 @@ run_target_config() {
 
   # vim
   printf "vim configuration..."
-  ln -fsr ${XDG_CONFIG_HOME}/nvim ${XDG_CONFIG_HOME}/vim
+  [ -e ${XDG_CONFIG_HOME}/vim ] || {
+    ln -fsr ${XDG_CONFIG_HOME}/nvim ${XDG_CONFIG_HOME}/vim
+  }
   echo "done."
   echo "please see ${XDG_CONFIG_HOME}/vim"
   echo ""
@@ -95,7 +104,7 @@ run_target_config() {
   printf "zsh configuration..."
   mkdir ${XDG_CONFIG_HOME}/zsh -p
   cp ${CONFIG_DIR}/zsh/* ${XDG_CONFIG_HOME}/zsh
-  ln -sft ${XDG_CONFIG_HOME}/zsh/zshrc ${HOME}/.zshrc
+  ln -sfr ${XDG_CONFIG_HOME}/zsh/zshrc ${HOME}/.zshrc
   mkdir ${XDG_CONFIG_HOME}/sheldon -p
   cp ${CONFIG_DIR}/sheldon/* ${XDG_CONFIG_HOME}/sheldon
   echo "done."

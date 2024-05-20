@@ -20,10 +20,10 @@ run_target_apt() {
     python-is-python3
     zsh
   )
-  for i in "${install[@]}"; do
+  for i in "${installs[@]}"; do
     sudo apt install ${i} -y
   done
-  sudo chsh ${USER} zsh
+  sudo chsh ${USER} -s zsh
 }
 
 # run_target_nvm() {

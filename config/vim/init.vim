@@ -177,6 +177,7 @@ augroup ftTab
   autocmd BufNewFile,BufRead *.java   call FnTab4()
   autocmd BufNewFile,BufRead *.lua    call FnTab4()
   autocmd BufNewFile,BufRead *.sh     call FnTab2()
+  autocmd BufNewFile,BufRead *.zsh    call FnTab2()
   autocmd BufNewFile,BufRead *.vim    call FnTab2()
   autocmd BufNewFile,BufRead *.ps1    call FnTab2()
   autocmd BufNewFile,BufRead *.bat    call FnTab2()

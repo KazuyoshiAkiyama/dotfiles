@@ -97,6 +97,9 @@ alias _ps='/bin/ps'
 
 alias tmux="tmux -2"
 
+alias tarpb2="tar --use-compress-program=pbzip2"
+alias tarpg="tar --use-compress-program=pigz"
+
 usage() {
   echo "usage of zsh customization"
   echo ""
