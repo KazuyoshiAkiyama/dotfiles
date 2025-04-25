@@ -2,29 +2,31 @@
 
 THIS_DIR=$(dirname $(readlink -f $0))
 
+source ${THIS_DIR}/common-util.sh
+
 DISTRO_DIR="${THIS_DIR}/distro"
 CONFIG_DIR="${THIS_DIR}/config"
 
 usage() {
-  echo "usage: run.sh <distro> [target]"
+  colorf "$CIAN" "usage: run.sh <distro> [target]\n"
   echo ""
   echo "Install packages/configs etc"
   echo ""
-  echo "positional arguments:"
+  colorf "$YELLOW" "positional arguments:\n"
   echo ""
-  echo "  distro: specify a distro"
+  colorf "$CIAN" "  distro: specify a distro\n"
   echo "    ubuntu22.04"
   echo ""
-  echo "optional arguments:"
+  colorf "$YELLOW" "optional arguments:\n"
   echo ""
-  echo "  target: specify a target to run"
+  colorf "$CIAN" "  target: specify a target to run\n"
   echo "    all [default]"
   echo "    apt"
   echo "    devbox"
   echo "    cargo"
   echo "    config"
   echo "    nvm"
-  exit $1
+  exit 2
 }
 
 # TODO: Improve argument parse
@@ -43,7 +45,7 @@ case "${OPT_DISTRO}" in
     usage 2
     ;;
   * )
-    echo "[ERROR] Unknown distro ${OPT_DISTRO} specified."
+    err "Unknown distro ${OPT_DISTRO} specified."
     usage 1
 esac
 
@@ -58,13 +60,13 @@ case "${OPT_TARGET}" in
     usage 2
     ;;
   * )
-    echo "[ERROR] Unknown target ${OPT_TARGET} specified."
+    err "Unknown target ${OPT_TARGET} specified."
     usage 1
 esac
 
 . ${DISTRO_DIR}/default.sh
 [ -f ${DISTRO_DIR}/${DISTRO}.sh ] || {
-  echo "[ERROR] Not Found distro script ${DISTRO}.sh"
+  err_exit "Not Found distro script ${DISTRO}.sh"
   exit 1
 }
 . ${DISTRO_DIR}/${DISTRO}.sh
