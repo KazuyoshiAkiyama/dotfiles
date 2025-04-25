@@ -8,7 +8,7 @@ DISTRO_DIR="${THIS_DIR}/distro"
 CONFIG_DIR="${THIS_DIR}/config"
 
 usage() {
-  colorf "$CIAN" "usage: run.sh <distro> [target]\n"
+  colorf "$CIAN" "usage: run.sh [distro] [target]\n"
   echo ""
   echo "Install packages/configs etc"
   echo ""
@@ -18,7 +18,7 @@ usage() {
   echo ""
   colorf "$CIAN" "  -d, --distro: specify a distro\n"
   echo "    Supported distro:"
-  echo "      ubuntu22.04"
+  echo "      ubuntu22.04 [default]"
   echo ""
   colorf "$CIAN" "  -t, --target: specify a target to run\n"
   echo "    If specifying multiple targets, please separate each target with \",\" like the following."
