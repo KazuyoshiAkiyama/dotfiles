@@ -1,7 +1,6 @@
 # Editors
 export EDITOR='nvim'
 export VISUAL='nvim'
-export PAGER='nvimpager'
 
 # Language
 if [[ -z "$LANG" ]]; then
@@ -62,6 +61,7 @@ git-search() {
 export GOPATH=$HOME/.go
 export CARGO_PATH=$HOME/.cargo/bin
 export PATH=$HOME/.local/bin:$CARGO_PATH:$GOPATH:$PATH
+export PATH=$PATH:/usr/local/go/bin
 [[ -f $HOME/.cargo/env ]] && source $HOME/.cargo/env
 
 # Git
@@ -78,12 +78,12 @@ case $- in
 esac
 
 # Alias
-alias ls='exa'
-alias ll='exa -alF'
-alias la='exa -a'
-alias l='exa -F'
+alias ls='exa -g'
+alias ll='exa -galF'
+alias la='exa -ga'
+alias l='exa -gF'
 alias tree='exa --tree'
-alias cat='bat -p'
+alias cat='bat -p --wrap=character --color=always'
 alias vim='nvim'
 alias v='nvim'
 alias ps='procs'
@@ -97,8 +97,9 @@ alias _ps='/bin/ps'
 
 alias tmux="tmux -2"
 
-alias tarpb2="tar --use-compress-program=pbzip2"
-alias tarpg="tar --use-compress-program=pigz"
+alias tarpb2="tar -I pbzip2"
+alias tarpg="tar -I pigz"
+alias tarpz="tar -I pxz"
 
 usage() {
   echo "usage of zsh customization"

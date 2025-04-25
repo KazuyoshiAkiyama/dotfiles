@@ -122,6 +122,8 @@ source ${XDG_CACHE_HOME:-$HOME/.cache}/powerlevel10k/powerlevel10k.zsh-theme
 
 [ -f ${HOME}/.nvm/nvm.sh ] && source ${HOME}/.nvm/nvm.sh
 
+nvm use --lts
+
 # source command override technique
 function source {
   ensure_zcompiled $1
