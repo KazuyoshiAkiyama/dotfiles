@@ -11,6 +11,20 @@ repo = 'mattn/vim-sonictemplate'
 [[plugins]]
 repo = 'tpope/vim-fugitive'
 
+# vim text object
+[[plugins]]
+repo = 'kana/vim-textobj-user'
+
+[[plugins]]
+repo = 'rhysd/vim-textobj-anyblock'
+# ib, ab
+
+[[plugins]]
+repo = 'machakann/vim-sandwich'
+# sr<?A><?B> : replace <?A> to <?B>
+# sd<?> : delete
+# sai<?>: wrap
+
 # Color/Theme
 # See dein.windows.toml and dein.linux.toml
 
