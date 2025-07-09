@@ -287,7 +287,27 @@ nnoremap <silent><nowait> <space>w  :<C-u>CocCommand fzf-preview.CocCurrentDiagn
 nnoremap <silent><nowait> <space>W  :<C-u>CocCommand fzf-preview.CocDiagnostics<CR>
 " Show reference
 nnoremap <silent><nowait> <space>rf  :<C-u>CocCommand fzf-preview.CocReferences<CR>
-nnoremap <silent><nowait> <space>ty  :<C-u>CocCommand fzf-preview.CocTypeDefinitions<CR>
+nnoremap <silent><nowait> <space>ty  :<C-u>CocCommand fzf-preview.CocTypeDefinition<CR>
+
+:command CSpellIgnoreWord :CocCommand cSpell.addIgnoreWord
+:command CSpellAddWordToUser :CocCommand cSpell.addWordToUserDictionary
+
+" disable inlayHint.display first
+:let g:inlayHint_display = 0
+:call coc#config('inlayHint.display', g:inlayHint_display)
+
+:function ToggleInlayHints()
+:  if g:inlayHint_display == 0
+:    let g:inlayHint_display = 1
+:  else
+:    let g:inlayHint_display = 0
+:  endif
+:  call coc#config('inlayHint.display', g:inlayHint_display)
+:  " FIXME: Need to find other way to refresh inlayHint status
+:  CocRestart
+:endfunction
+
+nnoremap <silent><C-p> :call ToggleInlayHints()<CR>
 
 if has('win32') || has('win64')
 

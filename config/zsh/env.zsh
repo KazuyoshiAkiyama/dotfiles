@@ -78,11 +78,19 @@ case $- in
 esac
 
 # Alias
+if type eza > /dev/null; then
+alias ls='eza -g'
+alias ll='eza -galF'
+alias la='eza -ga'
+alias l='eza -gF'
+alias tree='eza --tree'
+else
 alias ls='exa -g'
 alias ll='exa -galF'
 alias la='exa -ga'
 alias l='exa -gF'
 alias tree='exa --tree'
+fi
 alias cat='bat -p --wrap=character --color=always'
 alias vim='nvim'
 alias v='nvim'

@@ -31,7 +31,7 @@
     "cargo":                  "latest",
     "fd":                     "latest",
     "bat":                    "latest",
-    "exa":                    "latest",
+    "eza":                    "latest",
     "procs":                  "latest",
     "rls":                    "latest",
     "python-language-server": "latest",
@@ -50,8 +50,7 @@
     "autojump":               "latest",
     "fzy":                    "latest",
     "peco":                   "latest",
-    "fasd":                   "latest",
-    "nvimpager":              "latest"
+    "fasd":                   "latest"
   },
   "shell": {
     "init_hook": [
