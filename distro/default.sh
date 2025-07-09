@@ -2,7 +2,7 @@
 
 run_target_devbox() {
   curl -fsSL https://get.jetify.com/devbox | bash
-  devbox global pull https://github.com/KZYSAKYM/devbox-global-config.git
+  devbox global pull https://github.com/KazuyoshiAkiyama/devbox-global-config.git
   devbox global install
 
   # Post Funcs
