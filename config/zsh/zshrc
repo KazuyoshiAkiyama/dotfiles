@@ -121,9 +121,6 @@ function ensure_zcompiled {
 ensure_zcompiled ~/.zshrc
 ensure_zcompiled ~/.zcompdump
 
-# use devbox global as a package manager
-eval "$(devbox global shellenv --init-hook)"
-
 # use sheldon as a plugin manager
 SHELDON_CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/sheldon.zsh"
 SHELDON_TOML="${XDG_CONFIG_HOME:-$HOME/.config}/sheldon/plugins.toml"

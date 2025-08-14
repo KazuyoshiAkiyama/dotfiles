@@ -103,6 +103,8 @@ alias _cat="/bin/cat"
 alias b="cd ./../.."
 alias _ps='/bin/ps'
 
+alias fd="fdfind"
+
 alias tmux="tmux -2"
 
 alias tarpb2="tar -I pbzip2"

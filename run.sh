@@ -18,19 +18,21 @@ usage() {
   echo ""
   colorf "$CIAN" "  -d, --distro: specify a distro\n"
   echo "    Supported distro:"
-  echo "      ubuntu22.04 [default]"
+  echo "      ubuntu22.04"
+  echo "      ubuntu24.04 [default]"
   echo ""
   colorf "$CIAN" "  -t, --target: specify a target to run\n"
   echo "    If specifying multiple targets, please separate each target with \",\" like the following."
-  echo "      e.g. ) -t apt,devbox"
+  echo "      e.g. ) -t apt,cargo"
   echo ""
   echo "    Supported targets:"
   echo "      all [default]"
   echo "      apt"
-  echo "      devbox"
   echo "      cargo"
+  echo "      github"
   echo "      config"
   echo "      nvm"
+  echo "      uv"
 
   exit 2
 }
@@ -75,9 +77,12 @@ shift
 done
 
 case "${OPT_DISTRO}" in
-  "" | "ubuntu22.04" )
+  "" | "ubuntu24.04" )
     # OK
-    DISTRO="ubuntu22.04"
+    DISTRO="ubuntu24.04"
+    ;;
+  "ubuntu22.04" )
+    DISTRO="${OPT_DISTRO}"
     ;;
   * )
     err "Unknown distro ${OPT_DISTRO} specified."
@@ -89,10 +94,10 @@ if $SEL_OPT_TARGET; then
   for target in `echo $OPT_TARGET | sed "s|,| |g"`; do
     case "${target}" in
       "all" )
-        RUN_TARGET="apt devbox cargo config nvm"
+        RUN_TARGET="apt cargo github config nvm uv"
         break
         ;;
-      "apt" | "devbox" | "cargo" | "config" | "nvm" )
+      "apt" | "cargo" | "github" | "config" | "nvm" | "uv" )
         RUN_TARGET="${target}"
         ;;
       * )
@@ -102,7 +107,7 @@ if $SEL_OPT_TARGET; then
   done
 else
   # all
-  RUN_TARGET="apt devbox cargo config nvm"
+  RUN_TARGET="apt cargo github config nvm uv"
 fi
 
 . ${DISTRO_DIR}/default.sh
