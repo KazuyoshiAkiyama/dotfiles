@@ -16,6 +16,18 @@ repo = 'tpope/vim-fugitive'
 repo = 'kana/vim-textobj-user'
 
 [[plugins]]
+repo = 'osyo-manda/vim-textobj-multiblock'
+hook_add = '''
+omap av <Plug>(textobj-multiblock-a)
+omap iv <Plug>(textobj-multiblock-i)
+vmap av <Plug>(textobj-multiblock-a)
+vmap iv <Plug>(textobj-multiblock-i)
+'''
+
+[[plugins]]
+repo = 'sgur/vim-textobj-parameter'
+
+[[plugins]]
 repo = 'rhysd/vim-textobj-anyblock'
 # ib, ab
 
@@ -69,6 +81,27 @@ let g:floaterm_height = 1.0
 let g:floaterm_width = 0.8
 let g:floaterm_keymap_toggle = '<Leader>t'
 let g:floaterm_gitcommit = 'split'
+'''
+
+[[plugins]]
+repo = 'akinsho/toggleterm.nvim'
+hook_add = '''
+lua <<EOF
+local Terminal = require("toggleterm.terminal").Terminal
+local toggleterm = require("toggleterm")
+
+toggleterm.setup(
+  size = 20,
+  open_mapping = [[<C-\>]],
+  direction = "tab", -- "horizontal", "vertical", "float", "tab"
+  shade_terminals = true,
+  start_in_insert = true,
+  insert_mappings = true,
+  persist_size = true,
+)
+-- open term1: 1<C-\>
+-- open term2: 2<C-\>
+EOF
 '''
 
 # Ctags
@@ -345,32 +378,41 @@ endif
 '''
 
 hook_post_update = '''
-:CocInstall coc-sh
-:CocInstall coc-cmake
-:CocInstall coc-flutter
-:CocInstall coc-toml
-:CocInstall coc-json
-:CocInstall coc-lists
-:CocInstall coc-python
-:CocInstall coc-lua
-:CocInstall coc-go
-:CocInstall coc-rls
-:CocInstall coc-stylelint
-:CocInstall coc-spell-checker
-:CocInstall coc-html
-:CocInstall coc-css
-:CocInstall coc-prettier
-:CocInstall coc-yank
-:CocInstall coc-snippets
-" coc-fzf-previewめっちゃ難しそう(https://www.npmjs.com/package/coc-fzf-preview)
-:CocInstall coc-fzf-preview
-:CocInstall coc-highlight
-:CocInstall coc-xml
-:CocInstall coc-actions
-:CocInstall coc-explorer
-:CocInstall coc-yaml
-:CocInstall coc-tag
-:CocInstall coc-esbonio
+:CocInstall \
+coc-sh \
+coc-cmake \
+coc-flutter \
+coc-toml \
+coc-json \
+coc-lists \
+coc-python \
+coc-lua \
+coc-go \
+coc-rust-analyzer \
+coc-stylelint \
+coc-spell-checker \
+coc-html \
+coc-css \
+coc-prettier \
+coc-yank \
+coc-snippets \
+coc-fzf-preview \
+coc-highlight \
+coc-xml \
+coc-actions \
+coc-explorer \
+coc-yaml \
+coc-tag \
+coc-esbonio
+'''
+
+[[plugins]]
+repo = 'reireias/vim-cheatsheet'
+hook_add = '''
+let g:cheatsheet#cheat_file = '~/.config/nvim/cheatsheet.md'
+let g:cheatsheet#float_window = 1
+let g:cheatsheet#float_window_width_ratio = 0.9
+let g:cheatsheet#float_window_height_ratio = 0.8
 '''
 
 [[plugins]]

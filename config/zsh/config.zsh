@@ -34,4 +34,4 @@ esac
 # fzf
 source <(fzf --zsh)
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git"'
-export FZF_DEFAULT_OPS='--height 30% -border'
+export FZF_DEFAULT_OPS='--height 30% -border --ansi'

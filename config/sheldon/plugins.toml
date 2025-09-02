@@ -27,11 +27,27 @@ use = ["{!override,*}.zsh"]
 [plugins]
 [plugins.base16]
 github = 'chriskempson/base16-shell'
-apply = ["defer"]
-hooks.post = 'source ~/.base16_theme'
+apply = ["source"]
+hooks.post = """
+base16_gruvbox-dark-soft
+"""
 
-[plugins.zsh-syntax-highlighting]
-github = "zsh-users/zsh-syntax-highlighting"
+[plugins.zaw]
+github = "zsh-users/zaw"
+apply = ["source"]
+hooks.post = """
+bindkey '^R' zaw-history
+bindkey '^P' zaw
+bindkey '^G' zaw-git-files
+bindkey '^B' zaw-git-recent-branches
+"""
+
+[plugins.fast-syntax-highlighting]
+github = "zdharma-continuum/fast-syntax-highlighting"
+apply = ["defer"]
+
+[plugins.fzf-tab]
+github = "Aloxaf/fzf-tab"
 apply = ["defer"]
 
 [plugins.zsh-autosuggestions]
@@ -55,7 +71,7 @@ apply = ["defer"]
 [plugins.autojump]
 github = "wting/autojump"
 dir = "bin"
-apply = ["PATH", "source", "defer"]
+apply = ["PATH", "defer"]
 
 [plugins."z.lua"]
 github = "skywind3000/z.lua"
@@ -70,4 +86,11 @@ export ENHANCD_FILTER=fzy:fzf:peco
 export ENHANCD_DOT_ARG="^"
 export ENHANCD_HOME_ARG=""
 export ENHANCD_DISABLE_HOME=1
+"""
+
+[plugins.powerlevel10k]
+github = "romkatv/powerlevel10k"
+apply = ["source"]
+hooks.post = """
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 """

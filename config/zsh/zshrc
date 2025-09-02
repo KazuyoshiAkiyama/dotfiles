@@ -100,6 +100,9 @@ autoload -U bashcompinit
 compinit
 bashcompinit
 
+# always use emacs keybind
+bindkey -e
+
 #==============================================================================
 
 [ -f ${HOME}/.nvm/nvm.sh ] && source ${HOME}/.nvm/nvm.sh
@@ -133,21 +136,3 @@ unset SHELDON_CACHE SHELDON_TOML
 
 # restore builtin source
 zsh-defer unfunction source
-
-# powerlevel10k theme conficts with zsh-defer
-# so, only this plugin is installed manually
-[ -d ${XDG_CACHE_HOME:-$HOME/.cache}/powerlevel10k ] || {
-    mkdir -p ${XDG_CACHE_HOME:-$HOME/.cache}
-    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${XDG_CACHE_HOME:-$HOME/.cache}/powerlevel10k
-}
-
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-source ${XDG_CACHE_HOME:-$HOME/.cache}/powerlevel10k/powerlevel10k.zsh-theme
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
