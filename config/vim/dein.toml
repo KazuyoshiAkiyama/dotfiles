@@ -16,7 +16,7 @@ repo = 'tpope/vim-fugitive'
 repo = 'kana/vim-textobj-user'
 
 [[plugins]]
-repo = 'osyo-manda/vim-textobj-multiblock'
+repo = 'osyo-manga/vim-textobj-multiblock'
 hook_add = '''
 omap av <Plug>(textobj-multiblock-a)
 omap iv <Plug>(textobj-multiblock-i)
@@ -90,7 +90,7 @@ lua <<EOF
 local Terminal = require("toggleterm.terminal").Terminal
 local toggleterm = require("toggleterm")
 
-toggleterm.setup(
+toggleterm.setup{
   size = 20,
   open_mapping = [[<C-\>]],
   direction = "tab", -- "horizontal", "vertical", "float", "tab"
@@ -98,7 +98,7 @@ toggleterm.setup(
   start_in_insert = true,
   insert_mappings = true,
   persist_size = true,
-)
+}
 -- open term1: 1<C-\>
 -- open term2: 2<C-\>
 EOF
